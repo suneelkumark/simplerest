@@ -1,0 +1,62 @@
+openapi: 3.0.0
+info:
+  version: 1.0.3
+  title: Test
+paths:
+  /videos/related/{id}:
+    get:
+      description: Get the list of related videos from the id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: id of parent video
+          required: true
+        - in: query
+          name: videoType
+          schema:
+            type: string
+          description: video type
+          required: false
+      responses:
+        '200':
+          description: Returns an array of videos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatedVideoResponse'
+        '400':
+          description: Invalid request
+          headers:
+            Warning:
+              description: Information about the validation error
+              schema:
+                type: string
+        '404':
+          description: No resource with the given id is found
+        '500':
+          description: Unexpected error
+          headers:
+            Warning:
+              description: Information about the unexpected error
+              schema:
+                type: string
+components:
+  schemas:
+    RelatedVideoResponse:
+      type: object
+      properties:
+        relatedVideos:
+          type: array
+          items:
+             $ref: '#/components/schemas/VideoAsset'
+    VideoAsset:
+      type: object
+      properties:
+        id:
+           type: string
+        videoType:
+          type: string
+        videoUrl:
+          type: string
